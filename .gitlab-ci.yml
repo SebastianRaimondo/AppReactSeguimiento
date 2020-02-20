@@ -1,0 +1,46 @@
+image: node:10
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - export IMAGE_TAG="$CI_COMMIT_REF_NAME"
+  - export IMAGE_NAME_BACKEND="${CI_REGISTRY_IMAGE}/backend"
+  - export IMAGE_NAME_FRONTEND="${CI_REGISTRY_IMAGE}/frontend"
+  - which docker && docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+
+stages:
+  - test
+  - build
+
+test-backend:
+  stage: test
+  image: busybox
+  script:
+    - echo nada - BACK
+
+test-frontend:
+  stage: test
+  image: busybox
+  script:
+    - echo nada - FRONT
+
+backend:
+  stage: build
+  script:
+    - docker build --pull -f ./Dockerfile -t "${IMAGE_NAME_BACKEND}:${IMAGE_TAG}" ./server
+    - docker push "${IMAGE_NAME_BACKEND}:${IMAGE_TAG}"
+  only:
+    - /^\d+\.\d+/
+
+frontend:
+  stage: build
+  script:
+    - docker build --pull -f ./Dockerfile -t "${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}" ./client
+    - docker push "${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}"
+  only:
+    - /^\d+\.\d+/
+
+
