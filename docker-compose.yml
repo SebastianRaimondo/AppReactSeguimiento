@@ -1,0 +1,33 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+  server:
+    restart: on-failure
+    depends_on:
+      - mongo
+    build:
+      context: F:\taller\AppReactSeguimiento\track-app\server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    links:
+      - mongo
+  client:
+    restart: on-failure
+    depends_on:
+      - server
+    build:
+      context: F:\taller\AppReactSeguimiento\track-app\client
+      dockerfile: Dockerfile-deploy
+
+    ports:
+      - "80:80"
+    links:
+      - server
+volumes:
+  mongodata:
