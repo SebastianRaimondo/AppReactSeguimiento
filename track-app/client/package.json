@@ -35,7 +35,7 @@
     "react-dual-listbox": "^2.0.0",
     "react-icons": "^3.7.0",
     "react-multiselect-two-sides": "^0.16.0",
-    "react-native": "^0.60.5",
+    "react-native": "^0.62.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "reactstrap": "^6.5.0"
